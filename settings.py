@@ -94,4 +94,5 @@ INSTALLED_APPS = (
     'memrec.member',
     'memrec.mission',
     'memrec.certification',
+    'memrec.equipment',
 )
