@@ -93,4 +93,5 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'memrec.member',
     'memrec.mission',
+    'memrec.certification',
 )
