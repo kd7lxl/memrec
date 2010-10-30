@@ -28,6 +28,7 @@ class PersonAdmin(admin.ModelAdmin):
         'first_name',
         'dem_number',
     )
+    save_on_top = True
 admin.site.register(Person, PersonAdmin)
 
 admin.site.register(Phone)
