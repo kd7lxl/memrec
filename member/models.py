@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+from datetime import date
 import re
 
 phone_re = re.compile(r'^[\d]{10}$')
@@ -11,10 +12,18 @@ validate_hostname = RegexValidator(hostname_re, (u"Enter a valid hostname."), 'i
 
 
 class Person(models.Model):
+    """
+    Create a person:
+    >>> person = Person(last_name='Smith', first_name='John')
+    >>> person.save()
+    >>> person
+    <Person: John Smith>
+    """
     last_name = models.CharField(max_length=30)
     first_name = models.CharField(max_length=30)
-    dem_number = models.CharField(max_length=8, null=True, blank=True)
-    join_date = models.DateField()
+    dem_number = models.PositiveIntegerField(null=True, blank=True)
+    dob = models.DateField(null=True,blank=True)
+    join_date = models.DateField(null=True, blank=True)
     person_type = models.CharField(max_length=20, choices=(
         ('contact', 'contact'),
         ('recruit', 'recruit'),
@@ -22,9 +31,52 @@ class Person(models.Model):
     ))
     emergency_contact_1 = models.ForeignKey('self', blank=True, null=True, related_name='emergency_contact1_for')
     emergency_contact_2 = models.ForeignKey('self', blank=True, null=True, related_name='emergency_contact2_for')
+    date_added = models.DateField(auto_now_add=True)
     
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
+    
+    def age(self, today=date.today()):
+        born = self.dob
+        try: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = born.replace(year=today.year)
+        except:
+            birthday = born.replace(year=today.year, day=born.day-1)
+        if birthday > today:
+            yearsold = today.year - born.year - 1
+        else:
+            yearsold = today.year - born.year
+        if yearsold == 0:
+            if birthday > today:
+                monthsold = today.month - born.month - 1
+            else:
+                monthsold = today.month - born.month
+            return '%s mo' % (monthsold)
+        elif yearsold == 1:
+            return '%s yr' % (yearsold)
+        else:
+            return '%s yrs' % (yearsold)
+    
+    def time_in_unit(self, today=date.today()):
+        born = self.join_date
+        try: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = born.replace(year=today.year)
+        except:
+            birthday = born.replace(year=today.year, day=born.day-1)
+        if birthday > today:
+            yearsold = today.year - born.year - 1
+        else:
+            yearsold = today.year - born.year
+        if yearsold == 0:
+            if birthday > today:
+                monthsold = today.month - born.month - 1
+            else:
+                monthsold = today.month - born.month
+            return '%s mo' % (monthsold)
+        elif yearsold == 1:
+            return '%s yr' % (yearsold)
+        else:
+            return '%s yrs' % (yearsold)
     
     class Meta:
         ordering = ['last_name', 'first_name']
@@ -45,7 +97,7 @@ class EmailAddress(models.Model):
         return u'%s' % (self.email_address)
     
     class Meta:
-        verbose_name_plural = 'addresses'
+        verbose_name_plural = 'email addresses'
 
 class Address(models.Model):
     person = models.ForeignKey(Person)
