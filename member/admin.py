@@ -3,15 +3,15 @@ from django.contrib import admin
 
 class EmailAddressInline(admin.TabularInline):
     model = EmailAddress
-    extra = 1
+    extra = 0
 
 class AddressInline(admin.StackedInline):
     model = Address
-    extra = 1
+    extra = 0
 
 class PhoneInline(admin.TabularInline):
     model = Phone
-    extra = 1
+    extra = 0
 
 class PersonAdmin(admin.ModelAdmin):
     inlines = [
@@ -22,6 +22,14 @@ class PersonAdmin(admin.ModelAdmin):
     list_display = (
         '__unicode__',
         'dem_number',
+        'person_type',
+        'join_date',
+        'age',
+        'time_in_unit',
+    )
+    list_filter = (
+        'person_type',
+        'join_date',
     )
     search_fields = (
         'last_name',
@@ -31,7 +39,42 @@ class PersonAdmin(admin.ModelAdmin):
     save_on_top = True
 admin.site.register(Person, PersonAdmin)
 
-admin.site.register(Phone)
+class PhoneAdmin(admin.ModelAdmin):
+    list_display = (
+        'person',
+        '__unicode__',
+    )
+    search_fields = (
+        'person__last_name',
+        'person__first_name',
+        'phone_number',
+    )
+admin.site.register(Phone, PhoneAdmin)
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = (
+        'person',
+        'address1',
+        'address2',
+        'city',
+        'state',
+        'postal_code',
+    )
+    list_filter = (
+        'postal_code',
+        'city',
+        'state',
+    )
+    search_fields = (
+        'person__last_name',
+        'person__first_name',
+        'address1',
+        'address2',
+        'city',
+        'state',
+        'postal_code',
+    )
+admin.site.register(Address, AddressAdmin)
 
 admin.site.register(MembershipFeePayment)
 
