@@ -43,6 +43,15 @@ class PhoneAdmin(admin.ModelAdmin):
     list_display = (
         'person',
         '__unicode__',
+        'phone_type',
+        'service_provider',
+        'sms_enabled',
+        'sms_email_address',
+    )
+    list_filter = (
+        'phone_type',
+        'service_provider',
+        'sms_enabled',
     )
     search_fields = (
         'person__last_name',

@@ -131,6 +131,7 @@ class Phone(models.Model):
         ('fax', 'fax'),
     ))
     service_provider = models.ForeignKey(ServiceProvider, null=True, blank=True)
+    sms_enabled = models.BooleanField(default=False)
     
     def __unicode__(self):
         return u'(%s) %s-%s' % (
@@ -138,6 +139,11 @@ class Phone(models.Model):
             self.phone_number[3:6],
             self.phone_number[6:10],
         )
+    
+    def sms_email_address(self):
+        if self.service_provider is not None \
+        and self.sms_enabled is True:
+            return '%s@%s' % (self.phone_number, self.service_provider.sms_email_hostname)
     
     class Meta:
         verbose_name = 'phone number'
