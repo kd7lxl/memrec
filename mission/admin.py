@@ -1,6 +1,7 @@
 from models import *
 from django.contrib import admin
 
+
 class SigninAdmin(admin.ModelAdmin):
     list_display = (
         'mission',
@@ -20,8 +21,10 @@ class SigninAdmin(admin.ModelAdmin):
     )
 admin.site.register(Signin, SigninAdmin)
 
+
 class SigninInline(admin.TabularInline):
     model = Signin
+
 
 class MissionAdmin(admin.ModelAdmin):
     list_display = (
