@@ -29,8 +29,10 @@ class Person(models.Model):
         ('recruit', 'recruit'),
         ('member', 'member'),
     ))
-    emergency_contact_1 = models.ForeignKey('self', blank=True, null=True, related_name='emergency_contact1_for')
-    emergency_contact_2 = models.ForeignKey('self', blank=True, null=True, related_name='emergency_contact2_for')
+    emergency_contact_1 = models.ForeignKey('self', blank=True, null=True,
+        related_name='emergency_contact1_for')
+    emergency_contact_2 = models.ForeignKey('self', blank=True, null=True,
+        related_name='emergency_contact2_for')
     date_added = models.DateField(auto_now_add=True)
     
     def __unicode__(self):
@@ -122,7 +124,8 @@ class ServiceProvider(models.Model):
 
 class Phone(models.Model):
     person = models.ForeignKey(Person)
-    phone_number = models.CharField(max_length=10, validators=[validate_phone], help_text='Numbers only please, no punctuation.')
+    phone_number = models.CharField(max_length=10, validators=[validate_phone],
+        help_text='Numbers only please, no punctuation.')
     phone_type = models.CharField(max_length=10, null=True, blank=True, choices=(
         ('home', 'home'),
         ('work', 'work'),
@@ -141,6 +144,18 @@ class Phone(models.Model):
         )
     
     def sms_email_address(self):
+        '''
+        Generates an sms email address from number and provider.
+        
+        >>> person = Person(last_name="Smith", first_name="John")
+        >>> person.save()
+        >>> verizon = ServiceProvider.objects.get(name="Verizon")
+        >>> mobile_phone = Phone(person=person, phone_number='5556667777', \
+                phone_type='mobile', service_provider=verizon, sms_enabled=True)
+        >>> mobile_phone.save()
+        >>> print mobile_phone.sms_email_address()
+        5556667777@vtext.com
+        '''
         if self.service_provider is not None \
         and self.sms_enabled is True:
             return '%s@%s' % (self.phone_number, self.service_provider.sms_email_hostname)
