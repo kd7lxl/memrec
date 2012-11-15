@@ -5,6 +5,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^admin/mission/mission/(?P<mission_id>\d+)/emd078', 'memrec.mission.admin_views.emd078'),
-    (r'^admin/', include(admin.site.urls)),
+    (r'^mission/mission/(?P<mission_id>\d+)/emd078', 'memrec.mission.admin_views.emd078'),
+    (r'^', include(admin.site.urls)),
 )
