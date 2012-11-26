@@ -12,38 +12,46 @@ validate_hostname = RegexValidator(hostname_re, (u"Enter a valid hostname."), 'i
 
 
 class Person(models.Model):
-    id = models.IntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
-    last_name = models.CharField(max_length=150, db_column='Last Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    first_name = models.CharField(max_length=150, db_column='First name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    middle_initial = models.CharField(max_length=12, db_column='Middle Initial', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    dem_number = models.CharField(max_length=45, db_column='DEM Number', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    address = models.CharField(max_length=150, db_column='Address', blank=True) # Field name made lowercase.
-    address_2 = models.CharField(max_length=150, db_column='Address 2', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    city = models.CharField(max_length=150, db_column='City', blank=True) # Field name made lowercase.
-    state = models.CharField(max_length=150, db_column='State', blank=True) # Field name made lowercase.
-    zip = models.CharField(max_length=150, db_column='Zip', blank=True) # Field name made lowercase.
-    nextel = models.CharField(max_length=45, db_column='Nextel', blank=True) # Field name made lowercase.
-    home_phone = models.CharField(max_length=150, db_column='Home Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    cell_phone = models.CharField(max_length=150, db_column='Cell Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    cell_provider = models.CharField(max_length=120, db_column='Cell Provider', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    text_ok = models.CharField(max_length=3, db_column='Text OK', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    pager = models.CharField(max_length=150, db_column='Pager', blank=True) # Field name made lowercase.
-    email = models.CharField(max_length=240, db_column='Email', blank=True) # Field name made lowercase.
-    rank = models.CharField(max_length=45, db_column='Rank', blank=True) # Field name made lowercase.
-    dob = models.DateField(null=True, db_column='DOB', blank=True) # Field name made lowercase.
-    join_date = models.DateField(null=True, db_column='Join Date', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    drop_date = models.DateField(null=True, db_column='Drop Date', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    radio_number = models.CharField(max_length=12, db_column='Radio Number', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    ham_callsign = models.CharField(max_length=150, db_column='Ham Callsign', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_pri_name = models.CharField(max_length=150, db_column='Emrg Pri Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_pri_phone = models.CharField(max_length=60, db_column='Emrg Pri Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_pri_alt_phone = models.CharField(max_length=60, db_column='Emrg Pri Alt Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_pri_rel = models.CharField(max_length=60, db_column='Emrg Pri Rel', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_sec_name = models.CharField(max_length=150, db_column='Emrg Sec Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_sec_phone = models.CharField(max_length=60, db_column='Emrg Sec Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_sec_alt_phone = models.CharField(max_length=60, db_column='Emrg Sec Alt Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    emrg_sec_rel = models.CharField(max_length=60, db_column='Emrg Sec Rel', blank=True) # Field renamed to remove spaces. Field name made lowercase.
-    last_reup = models.DateField(null=True, db_column='Last Reup', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    id = models.AutoField(primary_key=True, db_column='ID')
+    last_name = models.CharField(max_length=150, db_column='Last Name', blank=True)
+    first_name = models.CharField(max_length=150, db_column='First name', blank=True)
+    middle_initial = models.CharField(max_length=12, db_column='Middle Initial', blank=True, null=True)
+    dem_number = models.CharField(max_length=45, db_column='DEM Number', blank=True, null=True)
+    address = models.CharField(max_length=150, db_column='Address', blank=True)
+    address_2 = models.CharField(max_length=150, db_column='Address 2', blank=True, null=True)
+    city = models.CharField(max_length=150, db_column='City', blank=True)
+    state = models.CharField(max_length=150, db_column='State', blank=True)
+    zip = models.CharField(max_length=150, db_column='Zip', blank=True, null=True)
+    nextel = models.CharField(max_length=45, db_column='Nextel', blank=True, null=True)
+    home_phone = models.CharField(max_length=150, db_column='Home Phone', blank=True, null=True)
+    cell_phone = models.CharField(max_length=150, db_column='Cell Phone', blank=True, null=True)
+    cell_provider = models.CharField(max_length=120, db_column='Cell Provider', blank=True, null=True)
+    text_ok = models.CharField(max_length=3, db_column='Text OK', blank=True, null=True)
+    pager = models.CharField(max_length=150, db_column='Pager', blank=True, null=True)
+    email = models.CharField(max_length=240, db_column='Email', blank=True, null=True)
+    rank = models.CharField(max_length=45, db_column='Rank', blank=True, null=True)
+    dob = models.DateField(null=True, db_column='DOB', blank=True)
+    join_date = models.DateField(null=True, db_column='Join Date', blank=True)
+    drop_date = models.DateField(null=True, db_column='Drop Date', blank=True)
+    radio_number = models.CharField(max_length=12, db_column='Radio Number', blank=True, null=True)
+    ham_callsign = models.CharField(max_length=150, db_column='Ham Callsign', blank=True, null=True)
+    emrg_pri_name = models.CharField(max_length=150, db_column='Emrg Pri Name',
+        blank=True, null=True, verbose_name='Priority Emergency Contact Name')
+    emrg_pri_phone = models.CharField(max_length=60, db_column='Emrg Pri Phone',
+        blank=True, null=True, verbose_name='Priority Emergency Contact Phone')
+    emrg_pri_alt_phone = models.CharField(max_length=60, db_column='Emrg Pri Alt Phone',
+        blank=True, null=True, verbose_name='Priority Emergency Contact Alternate Phone')
+    emrg_pri_rel = models.CharField(max_length=60, db_column='Emrg Pri Rel',
+        blank=True, null=True, verbose_name='Priority Emergency Contact Relation')
+    emrg_sec_name = models.CharField(max_length=150, db_column='Emrg Sec Name',
+        blank=True, null=True, verbose_name='Secondary Emergency Contact Name')
+    emrg_sec_phone = models.CharField(max_length=60, db_column='Emrg Sec Phone',
+        blank=True, null=True, verbose_name='Secondary Emergency Contact Phone')
+    emrg_sec_alt_phone = models.CharField(max_length=60, db_column='Emrg Sec Alt Phone',
+        blank=True, null=True, verbose_name='Secondary Emergency Contact Alternate Phone')
+    emrg_sec_rel = models.CharField(max_length=60, db_column='Emrg Sec Rel',
+        blank=True, null=True, verbose_name='Secondary Emergency Contact Relation')
+    last_reup = models.DateField(null=True, db_column='Last Reup', blank=True)
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
