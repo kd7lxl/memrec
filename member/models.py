@@ -12,29 +12,38 @@ validate_hostname = RegexValidator(hostname_re, (u"Enter a valid hostname."), 'i
 
 
 class Person(models.Model):
-    """
-    Create a person:
-    >>> person = Person(last_name='Smith', first_name='John')
-    >>> person.save()
-    >>> person
-    <Person: John Smith>
-    """
-    last_name = models.CharField(max_length=30)
-    first_name = models.CharField(max_length=30)
-    dem_number = models.PositiveIntegerField(blank=True)
-    dob = models.DateField(null=True, blank=True)
-    join_date = models.DateField(null=True, blank=True)
-    person_type = models.CharField(max_length=20, choices=(
-        ('contact', 'contact'),
-        ('recruit', 'recruit'),
-        ('member', 'member'),
-        ('past member', 'past member'),
-    ))
-    emergency_contact_1 = models.ForeignKey('self', blank=True, null=True,
-        related_name='emergency_contact1_for')
-    emergency_contact_2 = models.ForeignKey('self', blank=True, null=True,
-        related_name='emergency_contact2_for')
-    date_added = models.DateField(auto_now_add=True)
+    id = models.IntegerField(primary_key=True, db_column='ID') # Field name made lowercase.
+    last_name = models.CharField(max_length=150, db_column='Last Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    first_name = models.CharField(max_length=150, db_column='First name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    middle_initial = models.CharField(max_length=12, db_column='Middle Initial', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    dem_number = models.CharField(max_length=45, db_column='DEM Number', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    address = models.CharField(max_length=150, db_column='Address', blank=True) # Field name made lowercase.
+    address_2 = models.CharField(max_length=150, db_column='Address 2', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    city = models.CharField(max_length=150, db_column='City', blank=True) # Field name made lowercase.
+    state = models.CharField(max_length=150, db_column='State', blank=True) # Field name made lowercase.
+    zip = models.CharField(max_length=150, db_column='Zip', blank=True) # Field name made lowercase.
+    nextel = models.CharField(max_length=45, db_column='Nextel', blank=True) # Field name made lowercase.
+    home_phone = models.CharField(max_length=150, db_column='Home Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    cell_phone = models.CharField(max_length=150, db_column='Cell Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    cell_provider = models.CharField(max_length=120, db_column='Cell Provider', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    text_ok = models.CharField(max_length=3, db_column='Text OK', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    pager = models.CharField(max_length=150, db_column='Pager', blank=True) # Field name made lowercase.
+    email = models.CharField(max_length=240, db_column='Email', blank=True) # Field name made lowercase.
+    rank = models.CharField(max_length=45, db_column='Rank', blank=True) # Field name made lowercase.
+    dob = models.DateField(null=True, db_column='DOB', blank=True) # Field name made lowercase.
+    join_date = models.DateField(null=True, db_column='Join Date', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    drop_date = models.DateField(null=True, db_column='Drop Date', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    radio_number = models.CharField(max_length=12, db_column='Radio Number', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    ham_callsign = models.CharField(max_length=150, db_column='Ham Callsign', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_pri_name = models.CharField(max_length=150, db_column='Emrg Pri Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_pri_phone = models.CharField(max_length=60, db_column='Emrg Pri Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_pri_alt_phone = models.CharField(max_length=60, db_column='Emrg Pri Alt Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_pri_rel = models.CharField(max_length=60, db_column='Emrg Pri Rel', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_sec_name = models.CharField(max_length=150, db_column='Emrg Sec Name', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_sec_phone = models.CharField(max_length=60, db_column='Emrg Sec Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_sec_alt_phone = models.CharField(max_length=60, db_column='Emrg Sec Alt Phone', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    emrg_sec_rel = models.CharField(max_length=60, db_column='Emrg Sec Rel', blank=True) # Field renamed to remove spaces. Field name made lowercase.
+    last_reup = models.DateField(null=True, db_column='Last Reup', blank=True) # Field renamed to remove spaces. Field name made lowercase.
 
     def __unicode__(self):
         return u'%s %s' % (self.first_name, self.last_name)
@@ -82,6 +91,7 @@ class Person(models.Model):
             return '%s yrs' % (yearsold)
 
     class Meta:
+        db_table = u'Members'
         ordering = ['last_name', 'first_name']
 
 
@@ -93,38 +103,6 @@ class MembershipFeePayment(models.Model):
     def __unicode__(self):
         return u'%s paid $%02.f on %s' % (self.person, self.payment_amount, self.payment_date)
 
-
-class EmailAddress(models.Model):
-    person = models.ForeignKey(Person)
-    email_address = models.EmailField()
-
-    def __unicode__(self):
-        return u'%s' % (self.email_address)
-
-    class Meta:
-        verbose_name_plural = 'email addresses'
-
-
-class Address(models.Model):
-    person = models.ForeignKey(Person)
-    address1 = models.CharField(max_length=60)
-    address2 = models.CharField(max_length=60, null=True, blank=True)
-    city = models.CharField(max_length=30)
-    state = models.CharField(max_length=2)
-    postal_code = models.CharField(max_length=9)
-
-    def __unicode__(self):
-        return ', '.join([
-            self.address1,
-            self.address2 or '',
-            self.city,
-            self.state,
-            self.postal_code,
-        ])
-    class Meta:
-        verbose_name_plural = 'addresses'
-
-
 class ServiceProvider(models.Model):
     name = models.CharField(max_length=30)
     sms_email_hostname = models.CharField(max_length=60, validators=[validate_hostname])
@@ -134,45 +112,3 @@ class ServiceProvider(models.Model):
 
     class Meta:
         ordering = ['name']
-
-
-class Phone(models.Model):
-    person = models.ForeignKey(Person)
-    phone_number = models.CharField(max_length=10, validators=[validate_phone],
-        help_text='Numbers only please, no punctuation.')
-    phone_type = models.CharField(max_length=10, null=True, blank=True, choices=(
-        ('home', 'home'),
-        ('work', 'work'),
-        ('mobile', 'mobile'),
-        ('pager', 'pager'),
-        ('fax', 'fax'),
-    ))
-    service_provider = models.ForeignKey(ServiceProvider, null=True, blank=True)
-    sms_enabled = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return u'(%s) %s-%s' % (
-            self.phone_number[0:3],
-            self.phone_number[3:6],
-            self.phone_number[6:10],
-        )
-
-    def sms_email_address(self):
-        '''
-        Generates an sms email address from number and provider.
-
-        >>> person = Person(last_name="Smith", first_name="John")
-        >>> person.save()
-        >>> verizon = ServiceProvider.objects.get(name="Verizon")
-        >>> mobile_phone = Phone(person=person, phone_number='5556667777', \
-                phone_type='mobile', service_provider=verizon, sms_enabled=True)
-        >>> mobile_phone.save()
-        >>> print mobile_phone.sms_email_address()
-        5556667777@vtext.com
-        '''
-        if self.service_provider is not None \
-        and self.sms_enabled is True:
-            return '%s@%s' % (self.phone_number, self.service_provider.sms_email_hostname)
-
-    class Meta:
-        verbose_name = 'phone number'
