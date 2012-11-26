@@ -1,0 +1,74 @@
+[
+  {
+    "pk": 5, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Brushmonkey Staff", 
+      "is_training": true
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Brushmonkey Training", 
+      "is_training": true
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Meeting", 
+      "is_training": false
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Meeting with Training", 
+      "is_training": true
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Public Relations", 
+      "is_training": false
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": true, 
+      "name": "Search", 
+      "is_training": false
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": true, 
+      "name": "Search Evidence", 
+      "is_training": false
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "mission.missioncategory", 
+    "fields": {
+      "is_mission": false, 
+      "name": "Training", 
+      "is_training": true
+    }
+  }
+]

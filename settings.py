@@ -41,7 +41,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
-USE_L10N = True
+USE_L10N = False
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -96,4 +96,8 @@ INSTALLED_APPS = (
     'memrec.mission',
     'memrec.certification',
     'memrec.equipment',
+    'django_extensions',
 )
+
+TIME_FORMAT = 'Hi'
+TIME_INPUT_FORMATS = ('%H%M', '%H:%M:%S', '%H:%M')

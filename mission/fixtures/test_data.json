@@ -1,0 +1,51 @@
+[
+  {
+    "pk": 1, 
+    "model": "mission.mission", 
+    "fields": {
+      "category": 3, 
+      "mission_type": "training", 
+      "prepared_by": 1, 
+      "mission_number": "12-T-1005 Y", 
+      "date_end": "2012-11-11", 
+      "date_start": "2012-11-10", 
+      "signed": "Libby", 
+      "county": "Pierce", 
+      "mission_name": "Course 1A T"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "mission.signin", 
+    "fields": {
+      "time2_out": "13:30:00", 
+      "assignment": "", 
+      "time1_out": "15:00:00", 
+      "mission": 1, 
+      "time3_out": null, 
+      "miles_driven": 0, 
+      "hours": 14.5, 
+      "person": 114, 
+      "time1_in": "07:00:00", 
+      "time3_in": null, 
+      "time2_in": "07:00:00"
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "mission.signin", 
+    "fields": {
+      "time2_out": null, 
+      "assignment": "", 
+      "time1_out": "15:00:00", 
+      "mission": 1, 
+      "time3_out": null, 
+      "miles_driven": 0, 
+      "hours": 6.5, 
+      "person": 144, 
+      "time1_in": "08:30:00", 
+      "time3_in": null, 
+      "time2_in": null
+    }
+  }
+]

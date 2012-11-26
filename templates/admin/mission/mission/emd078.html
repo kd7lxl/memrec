@@ -24,6 +24,11 @@ td {
   border: 1px solid black;
   font-size: 10pt;
   padding: 1 3;
+  white-space: nowrap;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 .caps {
@@ -65,54 +70,70 @@ td {
   </tr>
   <tr class="border_thick">
     <td colspan="3" class="text_right">County in which mission took place:</td>
-    <td colspan="2">{{ mission.county }}</td>
+    <td colspan="2" class="text_center bold">{{ mission.county }}</td>
     <td colspan="4" class="text_right">Mission/Incident Number:</td>
-    <td colspan="2">{{ mission.mission_number }}</td>
+    <td colspan="2" class="text_center bold">{{ mission.mission_number }}</td>
   </tr>
   <tr class="border_thick">
     <td colspan="2" class="text_right">Mission/Incident Name:</td>
-    <td colspan="3">{{ mission.mission_name }}</td>
+    <td colspan="3" class="text_center bold">{{ mission.mission_name }}</td>
     <td class="text_right">Date From:</td>
-    <td colspan="2">{{ mission.date_start }}</td>
+    <td colspan="2" class="text_center bold">{{ mission.date_start }}</td>
     <td class="text_right">Date To:</td>
-    <td colspan="2">{{ mission.date_end }}</td>
+    <td colspan="2" class="text_center bold">{{ mission.date_end }}</td>
   </tr>
   <tr class="border_thick">
     <td class="text_right">Unit Name:</td>
-    <td colspan="10">Washington Explorer Search and Rescue - Pierce County Unit</td>
+    <td colspan="10" class="bold">Washington Explorer Search and Rescue - Pierce County Unit</td>
   </tr>
   <tr class="border_thick">
     <td class="text_right">Unit Address:</td>
-    <td colspan="10">P.O. Box 11322, Tacoma, WA  98411-0322</td>
+    <td colspan="10" class="bold">P.O. Box 11322, Tacoma, WA  98411-0322</td>
   </tr>
   <tr class="caps text_center">
     <td>Emergency<br />Worker<br />Name</td>
     <td>Card<br />No.</td>
     <td>Assign.<br />or<br />Team</td>
     <td class="double">Time In</td>
-    <td>Time Out</td>
+    <td>*Time Out</td>
     <td class="double">Time In</td>
-    <td>Time Out</td>
+    <td>*Time Out</td>
     <td class="double">Time In</td>
-    <td>Time Out</td>
+    <td>*Time Out</td>
     <td class="double">Total<br />Hours</td>
     <td>Round<br />Trip</br >Miles<br />(Driver)</td>
   </tr>
 {% for signin in mission.signin_set.all %}
   <tr class="text_center">
-    <td style="text-align:left;">{{ forloop.counter }}. {{ signin.person }}</td>
-    <td>{{ signin.person.dem_number }}</td>
+    <td style="text-align:left; white-space:nowrap;">{{ forloop.counter }}. {{ signin.person }}</td>
+    <td>{{ signin.person.dem_number|floatformat }}</td>
     <td>{{ signin.assignment }}</td>
-    <td class="double">{{ signin.time_in|date:"H:i" }}</td>
-    <td>{{ signin.time_out|date:"H:i" }}</td>
-    <td class="double"></td>
-    <td></td>
-    <td class="double"></td>
-    <td></td>
-    <td class="double">{{ signin.hours }}</td>
+    <td class="double">{{ signin.time1_in|time }}</td>
+    <td>{{ signin.time1_out|time }}</td>
+    <td class="double">{{ signin.time2_in|time }}</td>
+    <td>{{ signin.time2_out|time }}</td>
+    <td class="double">{{ signin.time3_in|time }}</td>
+    <td>{{ signin.time3_out|time }}</td>
+    <td class="double">{{ signin.hours|floatformat }}</td>
     <td>{{ signin.miles_driven }}</td>
   </tr>
 {% endfor %}
+{% for i in pad %}
+  <tr class="text_center">
+    <td style="text-align:left;">{{ i }}.</td>
+    <td></td>
+    <td></td>
+    <td class="double"></td>
+    <td></td>
+    <td class="double"></td>
+    <td></td>
+    <td class="double"></td>
+    <td></td>
+    <td class="double"></td>
+    <td></td>
+  </tr>
+{% endfor %}
+
   <tr class="border_thick">
     <td colspan="11" class="text_center" style="font-size:8pt;"><strong>*The time a person could reasonably have expected to reach home without stopping enroute.</strong></td>
   </tr>
@@ -120,7 +141,7 @@ td {
     <td class="text_right caps" style="border-right:none;font-size:8pt;"><strong>Total Personnel:</strong></td>
     <td colspan="2" class="text_center" style="border-left:none;">{{ mission.signin_set.all|length }}</td>
     <td colspan="2" class="text_right caps double" style="border-right:none;font-size:8pt;"><strong>Total Hours:</strong></td>
-    <td colspan="2" class="text_center" style="border-left:none;">{{ mission.total_hours }}</td>
+    <td colspan="2" class="text_center" style="border-left:none;">{{ mission.total_hours|floatformat }}</td>
     <td colspan="2" class="text_right caps double" style="border-right:none;font-size:8pt;"><strong>Total Mileage:</strong></td>
     <td colspan="2" class="text_center" style="border-left:none;">{{ mission.total_miles }}</td>
   </tr>
@@ -128,18 +149,18 @@ td {
     <td colspan="11"></td>
   </tr>
   <tr>
-    <td colspan="11" class="text_center caps" style="font-size:9pt;"><strong>THIS FORM MUST BE SIGNED BY LOCAL EMERGENCY MANAGEMENT DIRECTOR/COORDINATOR OR SHERIFF'S DEPUTY.</strong></td>
+    <td colspan="11" class="text_center caps" style="font-size:8pt;"><strong>THIS FORM MUST BE SIGNED BY LOCAL EMERGENCY MANAGEMENT DIRECTOR/COORDINATOR OR SHERIFF'S DEPUTY.</strong></td>
   </tr>
   <tr>
     <td colspan="11" class="text_center" style="font-size:11pt;"><em><strong>By my signature below, I certify that these persons did participate in this mission/incident:</strong></em></td>
   </tr>
   <tr>
-    <td colspan="5" style="border-bottom: none;">&nbsp</td>
+    <td colspan="5" style="border-bottom: none; height: 3em;">&nbsp</td>
     <td colspan="6" style="border-bottom: none;">&nbsp</td>
   </tr>
   <tr>
-    <td colspan="5" class="text_center" style="border-top: none;">Print Name and Title</td>
-    <td colspan="6" class="text_center" style="border-top: none;">Signature</td>
+    <td colspan="5" class="text_center bold" style="border-top: none;">Print Name and Title</td>
+    <td colspan="6" class="text_center bold" style="border-top: none;">Signature</td>
   </tr>
   <tr class="border_thick">
     <td colspan="2">EMD-078</td>
