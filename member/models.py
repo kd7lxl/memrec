@@ -69,6 +69,10 @@ class Person(models.Model):
         except TypeError:
             return None
 
+    def is_adult(self):
+        return self.age() >= 21
+    is_adult.boolean = True
+
     def years_in_unit(self, today=date.today()):
         try:
             return u'%.1f' % age(self.join_date, today)
