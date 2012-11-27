@@ -8,7 +8,7 @@ class PersonAdmin(admin.ModelAdmin):
         'dem_number',
         'join_date',
         'age',
-        'time_in_unit',
+        'years_in_unit',
     )
     list_filter = (
         'join_date',

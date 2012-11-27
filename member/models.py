@@ -11,6 +11,13 @@ hostname_re = re.compile(r'^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\
 validate_hostname = RegexValidator(hostname_re, (u"Enter a valid hostname."), 'invalid')
 
 
+def age(born, today=date.today()):
+    try:
+        return (today - born).days / 365.
+    except TypeError:
+        return None
+
+
 class Person(models.Model):
     id = models.AutoField(primary_key=True, db_column='ID')
     last_name = models.CharField(max_length=150, db_column='Last Name', blank=True)
@@ -57,46 +64,16 @@ class Person(models.Model):
         return u'%s %s' % (self.first_name, self.last_name)
 
     def age(self, today=date.today()):
-        born = self.dob
-        try:  # raised when birth date is February 29 and the current year is not a leap year
-            birthday = born.replace(year=today.year)
-        except:
-            birthday = born.replace(year=today.year, day=born.day - 1)
-        if birthday > today:
-            yearsold = today.year - born.year - 1
-        else:
-            yearsold = today.year - born.year
-        if yearsold == 0:
-            if birthday > today:
-                monthsold = today.month - born.month - 1
-            else:
-                monthsold = today.month - born.month
-            return '%s mo' % (monthsold)
-        elif yearsold == 1:
-            return '%s yr' % (yearsold)
-        else:
-            return '%s yrs' % (yearsold)
+        try:
+            return u'%d' % age(self.dob, today)
+        except TypeError:
+            return None
 
-    def time_in_unit(self, today=date.today()):
-        born = self.join_date
-        try:  # raised when birth date is February 29 and the current year is not a leap year
-            birthday = born.replace(year=today.year)
-        except:
-            birthday = born.replace(year=today.year, day=(born.day - 1))
-        if birthday > today:
-            yearsold = today.year - born.year - 1
-        else:
-            yearsold = today.year - born.year
-        if yearsold == 0:
-            if birthday > today:
-                monthsold = today.month - born.month - 1
-            else:
-                monthsold = today.month - born.month
-            return '%s mo' % (monthsold)
-        elif yearsold == 1:
-            return '%s yr' % (yearsold)
-        else:
-            return '%s yrs' % (yearsold)
+    def years_in_unit(self, today=date.today()):
+        try:
+            return u'%.1f' % age(self.join_date, today)
+        except TypeError:
+            return None
 
     class Meta:
         db_table = u'Members'
