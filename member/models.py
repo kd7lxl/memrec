@@ -66,7 +66,7 @@ class Person(models.Model):
 
     def age(self, today=date.today()):
         try:
-            return u'%d' % age(self.dob, today)
+            return int(age(self.dob, today))
         except TypeError:
             return None
 
