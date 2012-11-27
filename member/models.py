@@ -72,6 +72,7 @@ class Person(models.Model):
 
     def is_adult(self):
         return self.age() >= 21
+    is_adult.admin_order_field = 'dob'
     is_adult.boolean = True
 
     def years_in_unit(self, today=date.today()):
@@ -79,6 +80,7 @@ class Person(models.Model):
             return u'%.1f' % age(self.join_date, today)
         except TypeError:
             return None
+    years_in_unit.admin_order_field = 'join_date'
 
     class Meta:
         db_table = u'Members'
