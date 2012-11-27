@@ -23,7 +23,8 @@ class Person(models.Model):
     last_name = models.CharField(max_length=150, db_column='Last Name', blank=True)
     first_name = models.CharField(max_length=150, db_column='First name', blank=True)
     middle_initial = models.CharField(max_length=12, db_column='Middle Initial', blank=True, null=True)
-    dem_number = models.CharField(max_length=45, db_column='DEM Number', blank=True, null=True)
+    dem_number = models.CharField(max_length=45, db_column='DEM Number',
+        blank=True, null=True, verbose_name='DEM number')
     address = models.CharField(max_length=150, db_column='Address', blank=True)
     address_2 = models.CharField(max_length=150, db_column='Address 2', blank=True, null=True)
     city = models.CharField(max_length=150, db_column='City', blank=True)
