@@ -35,36 +35,39 @@ class Mission(models.Model):
     county = models.CharField(max_length=60)
     date_start = models.DateField()
     date_end = models.DateField()
+    day1 = models.DateField()
+    day2 = models.DateField(null=True, blank=True)
+    day3 = models.DateField(null=True, blank=True)
+    total_personnel = models.PositiveIntegerField(default=0)
+    total_hours = models.FloatField()
+    total_miles = models.PositiveIntegerField(default=0)
     signed_in = models.ManyToManyField(Person, through='Signin')
-    signed = models.CharField(max_length=255, blank=True,
+    signed = models.CharField(max_length=255, null=True, blank=True,
         help_text="This form must be signed by local emergency management "
         "director/coordinator or sheriff's deputy.")
     prepared_by = models.ForeignKey(User, null=True, blank=True)
 
     def __unicode__(self):
         if self.mission_name:
-            return u'%s (%s)' % (self.mission_number, self.mission_name)
+            return u'%s %s' % (self.mission_number, self.mission_name)
         return self.mission_number
 
-    def total_hours(self):
-        return self.signin_set.aggregate(models.Sum('hours'))['hours__sum']
-
-    def total_miles(self):
-        return self.signin_set.aggregate(models.Sum('miles_driven'))['miles_driven__sum']
+    class Meta:
+        ordering = ['-date_start']
 
 
 class Signin(models.Model):
     mission = models.ForeignKey(Mission)
     person = models.ForeignKey(Person)
     assignment = models.CharField(max_length=16, blank=True)
-    time1_in = models.TimeField(null=True, blank=True)
-    time1_out = models.TimeField(null=True, blank=True)
-    time2_in = models.TimeField(null=True, blank=True)
-    time2_out = models.TimeField(null=True, blank=True)
-    time3_in = models.TimeField(null=True, blank=True)
-    time3_out = models.TimeField(null=True, blank=True)
+    time1_in = models.DateTimeField(null=True, blank=True)
+    time1_out = models.DateTimeField(null=True, blank=True)
+    time2_in = models.DateTimeField(null=True, blank=True)
+    time2_out = models.DateTimeField(null=True, blank=True)
+    time3_in = models.DateTimeField(null=True, blank=True)
+    time3_out = models.DateTimeField(null=True, blank=True)
     hours = models.FloatField(editable=False)
-    miles_driven = models.PositiveIntegerField(default=0)
+    miles_driven = models.PositiveIntegerField(default=0, null=True, blank=True)
 
     def __unicode__(self):
         return u'%s @ %s' % (self.person, self.mission)
@@ -72,70 +75,24 @@ class Signin(models.Model):
     def clean(self):
         from django.core.exceptions import ValidationError
 
-        date_start = self.mission.date_start
-
-        # convert to datetimes before comparison
-        time1_in = datetime.combine(date_start, self.time1_in or time())
-        if self.time1_out is None:
-            time1_out = datetime.combine(date_start + timedelta(days=1), time())
-        else:
-            time1_out = datetime.combine(date_start, self.time1_out)
-
-        time2_in = datetime.combine(date_start + timedelta(days=1),
-            self.time2_in or time())
-        if self.time2_out is None:
-            time2_out = datetime.combine(date_start + timedelta(days=2), time())
-        else:
-            time2_out = datetime.combine(date_start + timedelta(days=1), self.time2_out)
-
-        time3_in = datetime.combine(date_start + timedelta(days=2),
-            self.time2_in or time())
-        if self.time3_out is None:
-            time3_out = datetime.combine(date_start + timedelta(days=3), time())
-        else:
-            time3_out = datetime.combine(date_start + timedelta(days=2), self.time3_out)
-
-        if time1_in > time1_out:
+        if self.time1_in > self.time1_out:
             raise ValidationError('Time Out must be later than Time In.')
-        if time2_in > time2_out:
+        if self.time2_in > self.time2_out:
             raise ValidationError('Time Out must be later than Time In.')
-        if time3_in > time3_out:
+        if self.time3_in > self.time3_out:
             raise ValidationError('Time Out must be later than Time In.')
 
     def calc_hours(self):
-        date_start = self.mission.date_start
-
-        # convert to datetimes before comparison
-        time1_in = datetime.combine(date_start, self.time1_in or time())
-        if self.time1_out is None:
-            time1_out = datetime.combine(date_start + timedelta(days=1), time())
-        else:
-            time1_out = datetime.combine(date_start, self.time1_out)
-
-        time2_in = datetime.combine(date_start + timedelta(days=1),
-            self.time2_in or time())
-        if self.time2_out is None:
-            time2_out = datetime.combine(date_start + timedelta(days=2), time())
-        else:
-            time2_out = datetime.combine(date_start + timedelta(days=1), self.time2_out)
-
-        time3_in = datetime.combine(date_start + timedelta(days=2),
-            self.time2_in or time())
-        if self.time3_out is None:
-            time3_out = datetime.combine(date_start + timedelta(days=3), time())
-        else:
-            time3_out = datetime.combine(date_start + timedelta(days=2), self.time3_out)
-
         duration = timedelta()
         if self.time1_in is not None:
-            duration += time1_out - time1_in
+            duration += self.time1_out - self.time1_in
         if self.time2_out is None:
             if self.time3_in is None and self.time3_out is not None:
                 duration += timedelta(hours=24)
         else:
-            duration += time2_out - time2_in
+            duration += self.time2_out - self.time2_in
         if self.time3_out is not None:
-            duration += time3_out - time3_in
+            duration += self.time3_out - self.time3_in
         return duration.days * 24 + duration.seconds / 3600.
 
     def save(self, *args, **kwargs):
@@ -143,4 +100,5 @@ class Signin(models.Model):
         super(Signin, self).save(*args, **kwargs)
 
     class Meta:
+        ordering = ['mission', 'time1_in', 'time2_in', 'time3_in']
         verbose_name = 'Sign-in'

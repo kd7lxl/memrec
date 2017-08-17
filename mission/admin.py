@@ -8,22 +8,21 @@ class SigninAdmin(admin.ModelAdmin):
         'mission',
         'person',
         'time1_in',
-        'time1_out',
-        'time2_in',
-        'time2_out',
-        'time3_in',
-        'time3_out',
         'hours',
         'miles_driven',
     )
     list_display_links = (
         'time1_in',
-        'time1_out',
     )
     list_filter = (
         'mission',
         'person',
     )
+    search_fields = [
+        'mission__mission_number',
+        'person__first_name',
+        'person__last_name',
+    ]
 admin.site.register(Signin, SigninAdmin)
 
 
