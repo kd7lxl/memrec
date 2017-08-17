@@ -23,6 +23,8 @@ class Person(models.Model):
     last_name = models.CharField(max_length=150, db_column='Last Name', blank=True)
     first_name = models.CharField(max_length=150, db_column='First name', blank=True)
     middle_initial = models.CharField(max_length=12, db_column='Middle Initial', blank=True, null=True)
+    last_nick = models.CharField(max_length=50, db_column='Last Nick', blank=True)
+    first_nick = models.CharField(max_length=50, db_column='First Nick', blank=True)
     dem_number = models.CharField(max_length=45, db_column='DEM Number',
         blank=True, null=True, verbose_name='DEM number')
     address = models.CharField(max_length=150, db_column='Address', blank=True)
@@ -41,6 +43,7 @@ class Person(models.Model):
     dob = models.DateField(null=True, db_column='DOB', blank=True)
     join_date = models.DateField(null=True, db_column='Join Date', blank=True)
     drop_date = models.DateField(null=True, db_column='Drop Date', blank=True)
+    dem_exp = models.DateField(null=True, db_column='DEM Card Expiration', blank=True, verbose_name='DEM Card Expiration')
     radio_number = models.CharField(max_length=12, db_column='Radio Number', blank=True, null=True)
     ham_callsign = models.CharField(max_length=150, db_column='Ham Callsign', blank=True, null=True)
     emrg_pri_name = models.CharField(max_length=150, db_column='Emrg Pri Name',
@@ -62,7 +65,8 @@ class Person(models.Model):
     last_reup = models.DateField(null=True, db_column='Last Reup', blank=True)
 
     def __unicode__(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+        return u'%s %s' % (self.first_nick or self.first_name,
+                           self.last_nick or self.last_name)
 
     def age(self, today=date.today()):
         try:
